@@ -3,11 +3,11 @@
     <view>
       <text>Beats Page</text>
     </view>
-    <view class="beats__callback" @tap="playBack" hover-class="beats__callback-active">START RECORDING CALLBACK</view>
+    <view class="beats__callback" @tap="playRecording" hover-class="beats__callback-active">START RECORDING CALLBACK</view>
     <view class="beats__callback" @tap="playMusic" hover-class="beats__callback-active">PLAY MUSIC</view>
     <view class="beats__callback" @tap="stopMusic" hover-class="beats__callback-active">STOP MUSIC</view>
     <view class="beats__callback" @tap="pauseMusic" hover-class="beats__callback-active">PAUSE MUSIC</view>
-    <view class="beats__recorder" @tap="record"></view>
+    <view class="beats__recorder" @touchstart="startRecording" @touchend="stopRecording" hover-class="beats__recorder-active"></view>
   </view>
 </template>
 
@@ -24,26 +24,17 @@ export default {
   },
 
   methods: {
-    record() {
+
+
+    startRecording() {
       const recorderManager = wx.getRecorderManager();
 
       recorderManager.onStart(() => {
         console.log('recorder start');
       });
-      recorderManager.onPause(() => {
-        console.log('recorder pause');
-      });
-      recorderManager.onStop((res) => {
-        console.log('recorder stop', res);
-        this.recording = res.tempFilePath;
-        console.log(this.recording);
-      });
-      recorderManager.onFrameRecorded((res) => {
-        const frameBuffer = res;
-        console.log('frameBuffer.byteLength', frameBuffer.byteLength);
-      });
+
       const options = {
-        duration: 5000,
+        duration: 10000,
         sampleRate: 44100,
         numberOfChannels: 1,
         encodeBitRate: 192000,
@@ -53,7 +44,17 @@ export default {
       recorderManager.start(options);
     },
 
-    playBack() {
+    stopRecording() {
+      const recorderManager = wx.getRecorderManager();
+      recorderManager.onStop((res) => {
+        console.log('recorder stop', res);
+        this.recording = res.tempFilePath;
+        console.log(this.recording);
+      });
+      recorderManager.stop();
+    },
+
+    playRecording() {
       const backgroundAudio = wx.getBackgroundAudioManager();
       backgroundAudio.title = 'Title';
       backgroundAudio.src = this.recording;
@@ -106,6 +107,12 @@ export default {
   border: 3px solid white;
 }
 
+.beats__recorder-active {
+  animation-name: recorder;
+  animation-duration: 0.5s;
+  box-shadow: 0 0 20px white;
+}
+
 .beats__callback {
   width: 90vw;
   margin: 0 auto;
@@ -119,4 +126,17 @@ export default {
   background-color: white;
   color: black;
 }
+
+@keyframes recorder {
+  from {
+    box-shadow: none;
+  }
+
+  to {
+    box-shadow: 0 0 20px white;
+  }
+}
+
+
+
 </style>
