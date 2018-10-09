@@ -1,10 +1,8 @@
 <template>
-  <view class="home__wrapper">
+  <view class="home__wrapper" @tap="navigateToBeats">
     <view class="home__title">
-      <text>Shanghai Beats</text>
-    </view>
-    <view class="home__enter-btn" hover-class="home__active-btn" @tap="navigateToBeats">
-      <text>Enter</text>
+      <text>Shanghai</text>
+      <text>Beats</text>
     </view>
   </view>
 </template>
@@ -30,7 +28,6 @@ export default {
       wx.navigateTo({
         url: '../beats/main',
       });
-      console.log('Hello there.');
     },
   },
 
@@ -39,6 +36,15 @@ export default {
 </script>
 
 <style>
+
+@font-face {
+    font-family: 'Righteous';
+    src: url('../../style/fonts/Righteous-Regular.woff2') format('woff2'),
+        url('../../style/fonts/Righteous-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 .home__wrapper {
   background-image: url('https://images.pexels.com/photos/894156/pexels-photo-894156.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
   background-size: cover;
@@ -51,9 +57,13 @@ export default {
 
 .home__title {
   color: white;
-  font-size: 40px;
+  font-size: 60px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
   padding-top: 50px;
-  text-shadow: 1px 1px 1px gray;
+  text-shadow: 0px 0px 5px white;
+  font-family: 'Righteous';
 }
 
 .home__enter-btn {

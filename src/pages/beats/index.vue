@@ -1,30 +1,24 @@
-<template>
-  <view class="beats__wrapper">
-    <view>
-      <text>Beats Page</text>
-    </view>
-    <view class="beats__callback" @tap="playRecording" hover-class="beats__callback-active">START RECORDING CALLBACK</view>
-    <view class="beats__callback" @tap="playMusic" hover-class="beats__callback-active">PLAY MUSIC</view>
-    <view class="beats__callback" @tap="stopMusic" hover-class="beats__callback-active">STOP MUSIC</view>
-    <view class="beats__callback" @tap="pauseMusic" hover-class="beats__callback-active">PAUSE MUSIC</view>
-    <view class="beats__recorder" @touchstart="startRecording" @touchend="stopRecording" hover-class="beats__recorder-active"></view>
-  </view>
-</template>
-
-
 <script>
+import musicPlayer from '@/components/musicPlayer';
 
 export default {
   computed: {},
 
+  components: {
+    musicPlayer,
+  },
+
   data() {
     return {
-      recording: '',
+      fakeMusicData: [
+        { name: 'MicMasterK', songImg: 'https://images.pexels.com/photos/1238980/pexels-photo-1238980.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', songLink: '' },
+        { name: 'Fiesty Meatballs', songImg: 'https://images.pexels.com/photos/462442/pexels-photo-462442.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', songLink: '' },
+        { name: 'Mr. Operator', songImg: 'https://images.pexels.com/photos/802195/pexels-photo-802195.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', songLink: '' },
+      ],
     };
   },
 
   methods: {
-
 
     startRecording() {
       const recorderManager = wx.getRecorderManager();
@@ -63,7 +57,7 @@ export default {
     playMusic() {
       const backgroundAudio = wx.getBackgroundAudioManager();
       backgroundAudio.title = 'Title';
-      backgroundAudio.src = 'http://mp3hdfm32.hala.jo:8132';
+      backgroundAudio.src = 'http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E06DCBDC9AB7C49FD713D632D313AC4858BACB8DDD29067D3C601481D36E62053BF8DFEAF74C0A5CCFADD6471160CAF3E6A&fromtag=46';
     },
 
     stopMusic() {
@@ -80,21 +74,28 @@ export default {
 
 </script>
 
+<template>
+  <view class="beats__wrapper">
+    <musicPlayer :musicData="fakeMusicData" class="beats__music-player"></musicPlayer>
+    <view class="beats__recorder" @touchstart="startRecording" @touchend="stopRecording" hover-class="beats__recorder-active"></view>
+  </view>
+</template>
+
 <style>
-@font-face {
-    font-family: Marker;
-    src: url(/src/style/fonts/PermanentMarker-Regular.ttf) format("ttf");
-}
 
 .beats__wrapper {
   background: linear-gradient(201.34deg, #0B191E 45.21%, #10110F 99.59%);
   height: 100vh;
   width: 100vw;
   color: white;
-  font-family: Marker;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
+}
+
+.beats__music-player {
+  margin-top: 20px;
 }
 
 .beats__recorder {
@@ -110,7 +111,7 @@ export default {
 .beats__recorder-active {
   animation-name: recorder;
   animation-duration: 0.5s;
-  box-shadow: 0 0 20px white;
+  box-shadow: 0 0 30px white;
 }
 
 .beats__callback {
